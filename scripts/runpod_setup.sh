@@ -73,7 +73,7 @@ apt-get install -y -qq \
     libxkbcommon0 \
     libpango-1.0-0 \
     libcairo2 \
-    libasound2
+    libasound2t64 2>/dev/null || apt-get install -y -qq libasound2 2>/dev/null || true
 
 # Install Zsh
 echo -e "${BLUE}🐚 Setting up Zsh...${NC}"
@@ -189,13 +189,23 @@ chsh -s $(which zsh) || echo -e "${GREEN}Note: Run 'chsh -s \$(which zsh)' manua
 # Install uv (fast Python package installer)
 echo -e "${BLUE}🐍 Installing uv and Python packages...${NC}"
 if ! command -v uv &> /dev/null; then
-    pip install uv -q
-    # Alternative: curl -LsSf https://astral.sh/uv/install.sh | sh
+    pip install uv -q --break-system-packages 2>/dev/null || pip install uv -q
 fi
 
-# Install Python packages using uv
-echo -e "${BLUE}📦 Installing Python ML/AI packages...${NC}"
-uv pip install --system --compile-bytecode -q \
+# Create virtual environment first to avoid externally-managed error
+echo -e "${BLUE}🔧 Creating virtual environment...${NC}"
+python_version=$(python --version 2>&1 | cut -d' ' -f2 | cut -d'.' -f1-2)
+if [ ! -d "$HOME/.venv" ]; then
+    uv venv ~/.venv --python "$python_version" --system-site-packages
+    echo -e "${GREEN}Virtual environment created at ~/.venv${NC}"
+else
+    echo -e "${GREEN}Virtual environment already exists at ~/.venv${NC}"
+fi
+
+# Install Python packages into the virtual environment
+echo -e "${BLUE}📦 Installing Python ML/AI packages into venv...${NC}"
+source ~/.venv/bin/activate
+uv pip install --compile-bytecode -q \
     ipykernel \
     kaleido \
     nbformat \
@@ -223,15 +233,12 @@ uv pip install --system --compile-bytecode -q \
     transformer_lens \
     nnsight
 
-# Create optional virtual environment with system site packages
-echo -e "${BLUE}🔧 Creating optional virtual environment...${NC}"
-python_version=$(python --version 2>&1 | cut -d' ' -f2 | cut -d'.' -f1-2)
-if [ ! -d "$HOME/.venv" ]; then
-    uv venv ~/.venv --python "$python_version" --system-site-packages
-    echo -e "${GREEN}Virtual environment created at ~/.venv${NC}"
-    echo -e "${BLUE}To activate: source ~/.venv/bin/activate${NC}"
-else
-    echo -e "${GREEN}Virtual environment already exists at ~/.venv${NC}"
+# Auto-activate venv in shell configs
+if ! grep -q "source ~/.venv/bin/activate" ~/.zshrc 2>/dev/null; then
+    echo -e "\n# Auto-activate virtual environment\nsource ~/.venv/bin/activate" >> ~/.zshrc 2>/dev/null || true
+fi
+if ! grep -q "source ~/.venv/bin/activate" ~/.bashrc; then
+    echo -e "\n# Auto-activate virtual environment\nsource ~/.venv/bin/activate" >> ~/.bashrc
 fi
 
 # Import bash history to zsh if it exists
