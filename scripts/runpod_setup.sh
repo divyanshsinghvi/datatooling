@@ -276,6 +276,7 @@ chmod 600 ~/.ssh/id_rsa
 chmod 600 ~/.ssh/id_rsa.pub
 git config --global user.email divyanshsinghvi@gmail.com
 git config --global user.name "Divyansh Singhvi"
+git config --global credential.helper store
 
 echo -e "${GREEN}✅ RunPod environment setup complete!${NC}"
 echo ""
