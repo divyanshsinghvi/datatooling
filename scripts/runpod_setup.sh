@@ -268,6 +268,15 @@ PYTHON
     fi
 fi
 
+#echo "IdentityFile /workspace/.ssh/id_rsa" >> ~/.ssh/config
+mkdir -p ~/.ssh
+cp /workspace/.ssh/id_rsa ~/.ssh/
+cp /workspace/.ssh/id_rsa.pub ~/.ssh
+chmod 600 ~/.ssh/id_rsa
+chmod 600 ~/.ssh/id_rsa.pub
+git config --global user.email divyanshsinghvi@gmail.com
+git config --global user.name "Divyansh Singhvi"
+
 echo -e "${GREEN}✅ RunPod environment setup complete!${NC}"
 echo ""
 echo -e "${BLUE}To start using Zsh with inline ghost text:${NC}"
