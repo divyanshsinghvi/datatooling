@@ -17,8 +17,7 @@ const COMMON_FIELDS: ComparisonField[] = [
   { label: 'Response Content', path: 'response.responses[0].content' },
   { label: 'Response Reasoning', path: 'response.responses[0].reasoning' },
   { label: 'Full Response', path: 'response.responses[0].full' },
-  { label: 'Prompt', path: 'prompt' },
-  { label: 'System Prompt', path: 'system_prompt' },
+  { label: 'Prompt', path: 'combined_prompt' }
 ]
 
 export function ComparisonView({ files }: ComparisonViewProps) {
@@ -190,15 +189,26 @@ export function ComparisonView({ files }: ComparisonViewProps) {
                   </div>
                 </div>
                 <div className="p-6 max-h-[600px] overflow-auto bg-gray-50/50">
-                  {value.includes('#') || value.includes('**') ? (
-                    <div className="prose prose-sm max-w-none">
-                      <ReactMarkdown>{value}</ReactMarkdown>
-                    </div>
-                  ) : (
-                    <pre className="text-sm text-gray-700 whitespace-pre-wrap font-mono leading-relaxed">
-                      {value}
-                    </pre>
-                  )}
+                  {(() => {
+                    // Better markdown detection
+                    const isMarkdown = (
+                      /^#{1,6}\s+/m.test(value) ||
+                      /\*\*[^*]+\*\*/m.test(value) ||
+                      /^[-*+]\s+/m.test(value) ||
+                      /^\d+\.\s+/m.test(value) ||
+                      (value.includes('```') && value.split('```').length > 2)
+                    )
+
+                    return isMarkdown ? (
+                      <div className="prose prose-sm max-w-none">
+                        <ReactMarkdown>{value}</ReactMarkdown>
+                      </div>
+                    ) : (
+                      <pre className="text-sm text-gray-700 whitespace-pre-wrap font-mono leading-relaxed">
+                        {value}
+                      </pre>
+                    )
+                  })()}
                 </div>
               </div>
             ))}

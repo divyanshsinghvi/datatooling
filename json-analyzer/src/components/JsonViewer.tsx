@@ -34,7 +34,14 @@ export function JsonViewer({ file }: JsonViewerProps) {
     if (typeof value === 'string') {
       // Check if this is a large text field that might be markdown
       const isLargeText = value.length > 200
-      const isLikelyMarkdown = value.includes('#') || value.includes('**') || value.includes('\n\n')
+      // More accurate markdown detection - check for markdown patterns at line start
+      const isLikelyMarkdown = (
+        /^#{1,6}\s+/m.test(value) ||        // Headers at line start
+        /\*\*[^*]+\*\*/m.test(value) ||     // Bold text
+        /^[-*+]\s+/m.test(value) ||         // Lists at line start
+        /^\d+\.\s+/m.test(value) ||         // Numbered lists
+        (value.includes('```') && value.split('```').length > 2) // Code blocks
+      )
 
       if (isLargeText) {
         return (
