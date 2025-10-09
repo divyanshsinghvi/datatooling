@@ -274,9 +274,14 @@ cp /workspace/.ssh/id_rsa ~/.ssh/
 cp /workspace/.ssh/id_rsa.pub ~/.ssh
 chmod 600 ~/.ssh/id_rsa
 chmod 600 ~/.ssh/id_rsa.pub
+mkdir -p /mnt/d/code/open_source/mats/reasoning_resample/
+ln -s /workspace/datag/mnt/d/code/open_source/mats/reasoning_resample/data
+
 git config --global user.email divyanshsinghvi@gmail.com
 git config --global user.name "Divyansh Singhvi"
 git config --global credential.helper store
+
+echo "export HF_HOME=/workspace/hf_home" >> ~/.zshrc
 
 echo -e "${GREEN}✅ RunPod environment setup complete!${NC}"
 echo ""
