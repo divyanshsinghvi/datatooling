@@ -1,4 +1,4 @@
-#!/bin/bash
+g!/bin/bash
 # RunPod Development Environment Setup
 # Sets up Zsh with autosuggestions, Starship prompt, and essential dev tools
 
@@ -195,16 +195,17 @@ fi
 # Create virtual environment first to avoid externally-managed error
 echo -e "${BLUE}🔧 Creating virtual environment...${NC}"
 python_version=$(python --version 2>&1 | cut -d' ' -f2 | cut -d'.' -f1-2)
-if [ ! -d "$HOME/.venv" ]; then
-    uv venv ~/.venv --python "$python_version" --system-site-packages
-    echo -e "${GREEN}Virtual environment created at ~/.venv${NC}"
+#if [ ! -d "$HOME/.venv" ]; then
+if [ ! -d "/workspace/.venv" ]; then
+    uv venv /workspace/.venv --python "$python_version" --system-site-packages
+    echo -e "${GREEN}Virtual environment created at /workspace/.venv${NC}"
 else
-    echo -e "${GREEN}Virtual environment already exists at ~/.venv${NC}"
+    echo -e "${GREEN}Virtual environment already exists at /workspace/.venv${NC}"
 fi
 
 # Install Python packages into the virtual environment
 echo -e "${BLUE}📦 Installing Python ML/AI packages into venv...${NC}"
-source ~/.venv/bin/activate
+source /workspace/.venv/bin/activate
 uv pip install --compile-bytecode -q \
     ipykernel \
     kaleido \
@@ -276,12 +277,16 @@ chmod 600 ~/.ssh/id_rsa
 chmod 600 ~/.ssh/id_rsa.pub
 mkdir -p /mnt/d/code/open_source/mats/reasoning_resample/
 ln -s /workspace/datag/mnt/d/code/open_source/mats/reasoning_resample/data
+mkdir -p /home/dsinghvi/code/open_source/mats/
+ln -s /workspace/reasoning_resample /home/dsinghvi/code/open_source/mats/reasoning_resample
 
 git config --global user.email divyanshsinghvi@gmail.com
 git config --global user.name "Divyansh Singhvi"
 git config --global credential.helper store
 
 echo "export HF_HOME=/workspace/hf_home" >> ~/.zshrc
+echo "source /workspace/.venv/bin/activate" >> ~/.zshrc
+echo "export UV_CACHE_DIR=/workspace/.cache/.uv" >> ~/.zshrc
 
 echo -e "${GREEN}✅ RunPod environment setup complete!${NC}"
 echo ""
