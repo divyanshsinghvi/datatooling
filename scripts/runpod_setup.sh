@@ -236,10 +236,10 @@ uv pip install --compile-bytecode -q \
 
 # Auto-activate venv in shell configs
 if ! grep -q "source ~/.venv/bin/activate" ~/.zshrc 2>/dev/null; then
-    echo -e "\n# Auto-activate virtual environment\nsource ~/.venv/bin/activate" >> ~/.zshrc 2>/dev/null || true
+    echo -e "\n# Auto-activate virtual environment\nsource /workspace/.venv/bin/activate" >> ~/.zshrc 2>/dev/null || true
 fi
 if ! grep -q "source ~/.venv/bin/activate" ~/.bashrc; then
-    echo -e "\n# Auto-activate virtual environment\nsource ~/.venv/bin/activate" >> ~/.bashrc
+    echo -e "\n# Auto-activate virtual environment\nsource /workspace/.venv/bin/activate" >> ~/.bashrc
 fi
 
 # Import bash history to zsh if it exists
@@ -276,9 +276,9 @@ cp /workspace/.ssh/id_rsa.pub ~/.ssh
 chmod 600 ~/.ssh/id_rsa
 chmod 600 ~/.ssh/id_rsa.pub
 mkdir -p /mnt/d/code/open_source/mats/reasoning_resample/
-ln -s /workspace/datag/mnt/d/code/open_source/mats/reasoning_resample/data
+ln -s /workspace/data /mnt/d/code/open_source/mats/reasoning_resample/data
 mkdir -p /home/dsinghvi/code/open_source/mats/
-ln -s /workspace/reasoning_resample /home/dsinghvi/code/open_source/mats/reasoning_resample
+ln -s /workspace/exploring_mech_interp /home/dsinghvi/code/open_source/mats/exploring_mech_interp
 
 git config --global user.email divyanshsinghvi@gmail.com
 git config --global user.name "Divyansh Singhvi"
@@ -287,6 +287,15 @@ git config --global credential.helper store
 echo "export HF_HOME=/workspace/hf_home" >> ~/.zshrc
 echo "source /workspace/.venv/bin/activate" >> ~/.zshrc
 echo "export UV_CACHE_DIR=/workspace/.cache/.uv" >> ~/.zshrc
+
+sudo apt install -y nodejs npm
+npm install -g @anthropic-ai/claude-code
+
+
+
+
+############### INSTALLING AGENTS ################
+uv pip install -e /workspace/agents/scribe
 
 echo -e "${GREEN}✅ RunPod environment setup complete!${NC}"
 echo ""
