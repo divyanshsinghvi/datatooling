@@ -1,4 +1,4 @@
-g!/bin/bash
+!/bin/bash
 # RunPod Development Environment Setup
 # Sets up Zsh with autosuggestions, Starship prompt, and essential dev tools
 
