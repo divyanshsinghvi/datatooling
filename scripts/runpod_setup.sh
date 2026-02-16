@@ -295,7 +295,6 @@ npm install -g @anthropic-ai/claude-code
 
 
 ############### INSTALLING AGENTS ################
-uv pip install -e /workspace/agents/scribe
 
 echo -e "${GREEN}✅ RunPod environment setup complete!${NC}"
 echo ""
