@@ -20,6 +20,7 @@ if ! grep -q "HF_HOME" ~/.zshrc 2>/dev/null; then
     echo "export HF_HOME=/workspace/hf_home/" >> ~/.zshrc 2>/dev/null || true
 fi
 export HF_HOME=/workspace/hf_home/
+export TRITON_CACHE_DIR=/workspace/.triton/cache
 
 # Update and upgrade system
 echo -e "${BLUE}📦 Updating system packages...${NC}"
