@@ -288,7 +288,7 @@ git config --global credential.helper store
 echo "export HF_HOME=/workspace/hf_home" >> ~/.zshrc
 echo "source /workspace/.venv/bin/activate" >> ~/.zshrc
 echo "export UV_CACHE_DIR=/workspace/.cache/.uv" >> ~/.zshrc
-
+echo 'export PATH="$HOME/.local/bin:$PATH"' >> ~/.zshrc
 sudo apt install -y nodejs npm
 npm install -g @anthropic-ai/claude-code
 
@@ -318,3 +318,4 @@ echo -e "${BLUE}Reminder:${NC}"
 echo "  • Add your SSH key to your RunPod account for git operations"
 echo ""
 echo -e "${GREEN}Happy coding! 🎉${NC}"
+
